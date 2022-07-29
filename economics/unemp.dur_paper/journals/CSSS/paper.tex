@@ -1,0 +1,682 @@
+\documentclass[fleqn,10pt]{wlscirep}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,amssymb,amsmath}
+\usepackage{graphicx}
+
+
+%%%%%
+% variable to include comments or not in the compilation ; set to 1 to include
+\def \draft {1}
+
+
+% writing utilities
+
+% comments and responses
+%  -> use this comment to ask questions on what other wrote/answer questions with optional arguments (up to 4 answers)
+\usepackage{xparse}
+\usepackage{ifthen}
+\DeclareDocumentCommand{\comment}{m o o o o}
+{\ifthenelse{\draft=1}{
+    \textcolor{red}{\textbf{C : }#1}
+    \IfValueT{#2}{\textcolor{blue}{\textbf{A1 : }#2}}
+    \IfValueT{#3}{\textcolor{ForestGreen}{\textbf{A2 : }#3}}
+    \IfValueT{#4}{\textcolor{red!50!blue}{\textbf{A3 : }#4}}
+    \IfValueT{#5}{\textcolor{Aquamarine}{\textbf{A4 : }#5}}
+ }{}
+}
+
+
+% todo
+\newcommand{\todo}[1]{
+\ifthenelse{\draft=1}{\textcolor{red!50!blue}{\textbf{TODO : \textit{#1}}}}{}
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+
+\title{%Working paper: 
+Modeling industrial symbiotic processes from a complex systems perspective}
+
+\author[1,*]{Joris Broere}
+\author[2]{Christine Moore}
+\author[3]{Juste Raimbault}
+\author[4]{Jesus Mario Serna}
+\author[5]{Marius Somveille}
+\author[6]{Evelyn Strombom}
+\author[7]{Lorraine Sugar}
+\author[8]{Ben Zhu}
+
+\affil[1]{Utrecht University, Department of Sociology, Utrecht, the Netherlands}
+\affil[2]{University of Oxford , Environmental Change Institute, Oxford, United Kingdom}
+\affil[3]{Université Paris 7, UMR CNRS 8504 Géographie-cités, Paris, France}
+\affil[4]{Université Paris 7, Center for Research in Psychoanalysis,Paris, France}
+\affil[5]{University of Oxford, Department of Zoology, Oxford, United Kingdom}
+\affil[6]{University of Minnesota, CBS Ecology, Evolution and Behavior, Minnesota, USA}
+\affil[7]{University of Toronto, Department of Civil Engineering, Toronto, Canada}
+\affil[8]{Delft University of Technology, 	
+Department of Engineering Systems and Services, Delft, the Netherlands}
+
+\affil[*]{corresponding.author@email.example}
+
+
+%\affil[+]{these authors contributed equally to this work}
+
+%\date{July 6, 2016}
+
+
+%\keywords{Keyword1, Keyword2, Keyword3}
+
+
+\begin{abstract}
+The 'circular economy' is recent approach on questions of sustainability. An important concept within the circular economy is industrial symbioses. Industrial symbioses is about creating an integrated byproduct and waste cycle between industrial actors. These so called `closing the loop' mechanisms are aimed at maximizing economic value and minimizing environmental effects. The idea of these mechanisms corresponds to complex system paradigms, however complexity science has hardly been utilized in this field.
+%In this project we started brainstorming on how complexity science can contribute to the field of circular economy. We think there are many ways in which complexity science can contribute, both in methods and in theory. 
+%In the past four weeks at CSSS 2016 we focused by modeling the circular economy by means of an agent based model.
+In this \textit{working paper} we describe a toy model to model waste flow between actors on the level of organizations/businesses. Its purpose is to investigate how waste flow is affected by different parameters such as distance, clustering, transportation cost and other parameters.
+%After the CSSS 2016 we will continue to work on the model,
+In this paper we explain the rationale of the basic model, then we put forward an exploration of its possibilities and finally we present some preliminary results. Future developments include the application to real world spatial maps and infrastructures as well as calibration to data of first real-world implementations of `circular economy practices'. The goal is to make the groundwork for an open source application that can be used to monitor the circular economy, as well as \comment{as well as - and thus}create a market place for waste products.
+%In what follows a first draft of the paper of the toy model.
+\end{abstract}
+
+
+
+
+
+\begin{document}
+
+
+\flushbottom
+\maketitle
+
+\thispagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%
+\section*{Introduction}
+
+% model rationale etc
+
+%\subsection*{Towards a Circular Economy}
+
+%%%%%%
+% Concept description
+%%%%%%
+
+%\subsubsection*{Concept}
+
+The 'circular economy' is a recent approach on questions of\comment{on questions of - for } sustainability. The current 'take, make, waste' way of producing is considered to be not sustainable anymore. Current thoughts on 'closing the loop' mechanisms on producing and consuming are booming in many different academic fields. An important concept within the circular economy is `industrial symbioses'. The main idea of industrial symbioses is that traditionally separate industries can collectively act to obtain a mutual competitive advantage through the physical exchange of materials like energy, water and byproducts and thereby create an environmental advantage as well ~\cite{chertow2000industrial}. The industrial symbioses approach seeks to recycle residual waste or by-products through the development of complex interlinkages between companies and firms.  In direct contrast with the conventional linear economic approach of material production of produce-use-dispose\comment{ produce-use-dispose, or take-make-dispose, as stated earlier?}, the circular economy approach seeks to reduce the uptake of virgin\comment{virgin-raw } materials while also reducing total waste production by accommodating the cycle of materials.
+ This concept is distinct from traditional recycling whereby products are often reduced to their lowest nutrient level, and then disposed of. In a circular economy approach\comment{In a circular economy approach - Here}, waste or by product materials of one firm have the potential to become high nutrient level inputs to another firm. As a result, there isn’t a sequential downgrading of waste or by-products, but rather a full cycling of materials. 
+
+A crucial factor in industrial symbiotic processes is the geographical proximity of the different industrial actors. Industrial symbioses is about the physical exchange of waste/byproducts. In order to efficiently exchange byproducts, an industrial actor often has to look for the symbiotic possibilities in its direct geographical proximity. We can take the example of excess heat: it would be harder to keep it at the same temperature the further\comment{further- farther } it needs to be transferred. So symbiotic activities and optimizing waste flows will most likely be more successful if the industrial actors are near each other. Eco-industrial parks are often considered concrete realizations of the concept industrial symbioses \comment{ concept industrial symbioses - industrial symbiotic approach }. On these parks businesses work together to reduce waste and pollution, effectively sharing different kind of resources and exchanging byproducts. The key advantage is that these actors are located together, therefore exchanges and infrastructure are easier realized \comment{and infrastructure are easier realized- are brought on more easily by the shared infrastructure?}. However, these parks are often far from being self sufficient. In order to optimize `waste' flows, parks need to exchange with actors from different parks/geographical areas as well. This makes optimizing waste flow and `closing the loop' mechanisms a highly complex phenomenon, with actors on different levels and with different geographical distances. 
+
+So\comment{so- Therefore, } `closing the loop' mechanisms in industrial symbiotic exchanges have a clear spatial component. However, the role of this spatial component has never been formally researched. While many large organizations, including the EU and the UN, have expressed interest in adopting the a circular economy approach, much of the work done so far has either focused on small scale applied examples or on theoretical frameworks and models. As such, more studies are needed to model the dynamics at play in the circular economy approach, in order to offer more examples and begin to offer larger more generalized examples of how the concept feasibly be achieved\comment{Change this whole phrase to something like: Hence, in order to offer a broader spectrum of examples on how a circular economy approach can be feasibly achieved, more studies are needed to model the dynamics that are at play}. We propose thus in this working paper to tackle this issue at a modest level, by exploring patterns of theoretical feasibility from an agent-based modeling point of view\comment{we could change this phrase to: Thus, to begin to tackle this issue, in this working paper we propose exploring some patterns of theoretical feasibility from an agent-based modeling point of view}. It has been recently postulated that evidence-based methods, in particular agent-based modeling, could be crucial for economy in general~\cite{farmer2009economy}. More concretely, we study the effect of different geographical concepts on the functioning of a symbiotic system as a whole, by means of an agent based model. In this model actors are located on a spatial plane. Each actor has an input and an output in terms of needs and waste. The goal of the agents is to minimize the waste and maximize their economical profit. First we study whether there is a spatial effect on the functioning of the system by comparing a uniform spatial distribution with a theoretical real world distribution and an empirical distribution. Secondly, we study the effect of geographically matching the actors on their input and output on the functioning of the system. In what follows we will present the rationale of the basic model as well as its exploration, finally presenting the ensuing preliminary results.  
+
+
+  
+%%%%%%%%%%%%%%%%%%%%%
+% Interdisicplinary Literature review 
+%%%%%%%%%%%
+
+%\subsubsection*{Existing Approaches}
+
+
+%An interdisciplinary review on Circular Economy is done in~\cite{ghisellini2016review}. It is crucial to note that the concept is by essence trans-disciplinary, and that integrated approaches are necessary although epistemological clarifications are generally important for their success~\cite{sauve2016environmental}.
+
+
+%\paragraph*{Urban Metabolism}
+
+%References on Urban Metabolism : \cite{kennedy2007changing}, \cite{kennedy2011study}, \cite{newcombe1978metabolism}, \cite{bodini2012cities}, \cite{hoornwegmainstreaming}.
+
+%Olsen develops in \cite{olsen1982urban} a theory of the city as an organism. The metaphor yields associated temporal and spatial scales, corresponding cycles for economic and human variables. Cycle contents are qualitatively detailed, but no numerical application nor conceptual model are provided. Can be used in our case as a “theoretical backup” reference.
+
+
+%\paragraph{Industrial Ecology}
+
+%The field of industrial ecology begins to self-witness its own limitations and the need for more opening and integrative methods. Indeed, in \cite{bai2007industrial}, as an editorial for the Journal of Industrial Ecology, it is argued that the study of cities and industrial ecology have to be reconciled. The proposition of ``Tackling global problems at the local level'' corresponds to our idea of a complexity-rooted bottom-up approach to circular economy.
+
+
+%\paragraph{Complexity in industrial symbiosis literature}
+
+%The resilience of industrial symbioses networks is studied by~\cite{li2015resilience}, through simulations based on real data by looking at what the impact of node removal. In \cite{zhu2013exploring} an agent-based model on resilience in industrial ecosystems is proposed.
+
+
+
+%\paragraph{Ecology}
+
+
+%Citation on information theory in ecological systems. Could be interesting for model comparison : \cite{ulanowicz1991ecosystem}
+
+%\cite{may1973stability} : Potential interesting book.
+
+
+
+%\subsection{Existing studies into circular economies}
+
+% -> included in literature
+
+%\paragraph{Real-world Applications}
+
+%This approach has been practically adopted on a small scale in Asia, specifically in China, via the establishment of eco-industrial parks~\cite{geng2013measuring}.
+
+%There have been a number of publications which have assessed the theoretical options and implications of adopting a circular economy approach. 
+
+
+
+
+%%%%%%%%%%%%%%%
+%\subsection*{Models of Simulation to Assess Feasibility}
+
+% Rational for our model/study : describe what we want to do, why and how
+
+%While many large organizations, including the EU and the UN,  have expressed interest in adopting the a circular economy approach, much work which has been done has either focused on small scale applied examples or on theoretical frameworks and models. As such, studies are needed which seek to model the dynamics of the circular economy concept, and begin to offer larger more generalized examples of how the concept feasibly be achieved. 
+
+
+%\cite{george2015circular} : model of economic growth with circular economy
+
+
+%We propose thus in this monograph to tackle this issue at a theoretical level level, by exploring patterns of feasibility from an agent-based modeling point of view. Questions related to effective supply chain implementation, depending on the domain, are beyond the scope of this paper but also well documented, as e.g. \cite{genovese2015sustainable}.
+
+%It has been recently postulated that evidence-based methods, in particular agent-based modeling, could be crucial for economy in general~\cite{farmer2009economy}.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+%\section{Model Description}
+\section*{Model description} \label{sec:modelDescription} % for scirep, standard sectioning
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Rationale}
+
+% develop the basic idea behind our model ; and why we think results from agent-based simulations can give useful insight into dynamics of circular economy and its feasibility.
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Model Core}
+
+
+%%%%%%%%%%%%%%%%%%
+\paragraph*{Model setup}
+
+The core part of the model is assumed to take place at a single scale, but with variable spatial range. The agents are $N$ companies indexed by $1\leq i\leq N$, that have a fixed spatial position $\vec{x}_i$. In order to focus on the exchange of by-products as inputs for other companies, we choose not to model the effective product nor the ``external'' inputs. For the sake of simplicity, by-products are assumed to be described by a finite-dimensional real variable $\vec{y}\in \mathbb{R}^d$. Finite values are a reasonable domain for by-products characteristics as it allows to normalize along each axis and take $\vec{y} \in \left[0,1\right]^d$. Each company has a demand function and an offer function, which were used to establish links between pairs of companies (i.e. exchange of by-products). These function are defined in a simple manner by $\vec{D}_i (\vec{y})= D_i^{(0)}\cdot \vec{d}_i (\vec{y})$ and $\vec{O}_i (\vec{y})= O_i^{(0)}\cdot \vec{o}_i (\vec{y})$, where $\vec{d}_i$ and $\vec{o}_i$ are multivariate probability densities. We started our simulation with a set of companies that were not linked with each other, and then grew the network based on rules determining exchange of by-products (effectively creating links between companies).
+
+
+
+%%%%%%%%%%%%%%%%%%
+\paragraph*{Growing the circular economy network}
+
+The temporal scope of the model evolution was assumed to be at a mesoscopic time scale, following the assumption that companies localization and the surrounding urban environment (which includes the transportation cost landscape) remain constant. The temporal dynamics consist of network growth, i.e. the progressive establishment of complementary links between companies that correspond to flows of by-products.
+
+Two factors were used to establish links between companies (i.e. exchange of by-products): 1) the geographical distance separating them, and 2) the match between demand and offer. The geographical interaction potential ($V_{ij}$; i.e. probability of two companies interacting based on their geographical location) decreased exponentially with distance such as $V_{ij}=\frac{1}{d_{ij}^{\alpha}}$ % we probably need references here %
+Increasing geographical distance also meant increasing transportation cost (in a linear fashion). The match between a company's offer (i.e. what it wastes after production) and another company's demand (i.e. what it could use for production) was computed along a "by-product" axis (an abstract by-product one-dimensional space, which could later be generalized to a multi-dimensional space). Along this by-product axis, the offer function and a demand function of each company are represented by a gaussian density distribution. We computed the overlap between pairs of demand and offer functions \(o = \int min(O,D) dx\) – a higher overlap indicating a higher probability that the two companies exchange by-products – and used an overlap threshold $T_o$ above which companies could potentially exchange by-products. This modeling approach was inspired by the ecological literature on probability niche models in complex food webs \cite{williams2000simple,williams2010probabilistic}. In these models, predation interaction between two species was modeled as the probability of species i eating another species j based on their values along a "niche" axis. More specifically, species i has a feeding optimum and the probability of eating species j declines has the niche position of species j gets further from this feeding optimum, which was model using a Gaussian centered on the feeding optimum. 
+
+The utility function associated with each potential exchange of by-products between two companies was defined as follows:
+\[
+u = o - c \cdot \frac{d}{d_{max}}
+\]
+where $o$ is the overlap between the two companies in by-product space, $c$ is the transportation cost, $d$ is the geographical distance between the two companies, and $d_{max}$ is the maximum distance between any two companies in the system.
+
+
+In our model, at each time step, the following set of rules was applied:
+\begin{itemize}
+\item A company, the ``current contractor'' is drawn at random % distrib
+\item Potential partners are drawn
+\begin{itemize}
+\item according to geographical interaction potential $V_{ij}=\frac{1}{d_{ij}^{\alpha}}$
+\item among these, the ones whose overlap is above $T_o$ are taken as potential partners
+% detail the overlap in terms of conditional probabilities
+% and update of "remaining distributions"
+\end{itemize}
+\item given the set of utilities $(u_{1j},u_{j1})_j \simeq (u_j)_j$, the potential partner with best utility is chosen
+% - note : write on potential bargain game
+% - write utility with transportation cost
+% - explain why utility equal
+% - transportation cost are shared : LOGICAL because one can pick up, or the other deliver == shared
+% RANDOM UTILITY MODEL
+\end{itemize}
+
+
+
+
+\paragraph*{Indicators of Circularity}
+
+% Q : what indicators ?
+% Q : find a price indicator
+
+The circularity of the model was evaluated using the method of Haas et al.~\cite{haas2015circular}. The authors define the \textit{degree of circularity} within an economy as recycling as a percentage of processed materials. \textit{Processed materials} are defined as the sum of consumption of materials (input into the system) and recycled materials. The authors further define the indicator \textit{waste throughput} as the waste output as a percentage of processed materials. 
+
+For a given model run with $n$ companies and $W$ total waste output, the three indicators can be calculated as follows (see Figure {\ref{fig:Variables} for visual representation of variables):
+
+\begin{enumerate}
+\item Processed Materials (PM): 
+
+\[PM = IM+RM = n+(n-W)\]
+where $IM$ is the total material input (i.e., the number of companies $n$, given that each company requires one unit of input), and $RM$ is the recycled materials (i.e., $IM$, or $n$, less total waste $W$).
+
+\item Degree of Circularity (DC):
+
+\[DC = \frac{RM}{PM}=\frac{RM}{IM+RM}=\frac{n-W}{n+(n-W)}\]
+
+\item Waste Throughput (WT):
+
+\[WT = \frac{W}{PM}=\frac{W}{n+(n-W)}\]
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figures/Variables.png}
+\caption{\label{fig:Variables}Variables used in calculation of indicators, as determined for one trade between companies (redraw for final paper). Total material input, $IM$, is the sum of input material for all companies; total recycled materials, $RM$, is the sum of recycled material for all companies; the total waste, $W$, is the sum of waste for all companies.}
+\end{figure}
+%%%%%%%%%%%%%%%%%
+
+
+In their study, \cite{haas2015circular} estimate these indicators for the global and European economies. The authors found that the total processed materials in the global economy is 62 Gt/year (58 Gt/year raw material plus 4 Gt/year recycled), and the degree of circularity is 6 percent. The European Union was found to have 7.7 Gt/year of total processed materials with a degree of circularity of 13 percent. Waste throughput for both economies was found to be 66 percent. These real-economy values could provide a point of comparison for further development of the model that would include real world economic data.
+
+ 
+ 
+ 
+\paragraph*{Geographical setup}
+
+The initial position of companies can be setup in many ways. The most basic case is a spatial uniform distribution of coordinates, and the model is first tested on it. A more refined spatialization can be done given a population density field $d(\vec{x})$. Assuming a local scaling of companies number as a function of population of a city $N$ (not verified at a small scale, but more reasonable at a macroscopic scale), $Y \sim N^{\alpha}$, we take the probability for a firm to locate in a patch as a function of its population $\mathbb{P}\left(\vec{x}_i=\vec{x}|i\right) \propto \left(\frac{N(\vec{x}}{\sum N}\right)^{\alpha}$. Companies are thus located sequentially at random, given these probability. Population distribution can be synthetically generated, as a kernel mixture $P(\vec{x}) = \sum_{1\leq j\leq p} K_j (\vec{x})$ with $p$ number of cities (or ``centers''), and kernels $K_j(\vec{x}) = \cdot \exp{-\frac{||\vec{x}-\vec{x}_j||}{r_0}}$ where $x_j$ is random with uniform distribution and $r_0$ is computed such that the city system respects Zipf rank-size law with exponent $\gamma$ (similar values at origin assume a constant maximal center density across cities), i.e. such that $P_j = \iint K_j \propto \frac{1}{j^{\gamma}}$. For real system, we use the raster population density with 1km resolution from CIESIN~\cite{gridded2005density}.
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\includegraphics[width=0.32\textwidth]{figures/ex_uniform_0}
+\includegraphics[width=0.32\textwidth]{figures/ex_synthetic_0}
+\includegraphics[width=0.32\textwidth]{figures/ex_geo_0}
+\caption{Examples for three possible geographical setups (from left to right, uniform, synthetic city system, real density data)}
+\label{fig:spatialization-example}
+\end{figure}
+%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%
+% RQ : same price for each material (can be tricked with general cost)
+% RQ : synthetic city generation : companies scales with P -> E ~ 1/ i ^ alpha*beta
+% RQ : multiple links at time.
+% RQ : maybe not that good for the other ? -> here put a proba or Game Theory ? ?
+
+% WHEN DO WE STOP ?
+
+% RQ : input from external ?
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+\section*{Results}
+
+% TODO : when all line up, should be perfectly circular 
+%  -> interesting to look at the sensitivity of circularity indicators when moving slightly distribs.
+
+% calibration on a given parc ?
+
+% web application ?
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Model Exploration}
+
+
+%%%%%%%%%%%%%%%%%%
+\subsubsection*{Uniform spatialization}
+
+We ran first experiments with a uniform initial distribution. Figures~\ref{fig:heatmap} and~\ref{fig:pareto} in Supplementary Material show heatmaps and Pareto front.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsubsection*{Synthetic city system}
+
+\textit{See repository for figures for similar experiments with synthetic system}
+
+%%%%%%%%%%%%%%%%%%
+\subsubsection*{Real city system}
+
+\textbf{Interesting result} : qualitative transition when changing from uniform to real system - implications for decision making ; importance to embed in a real urban system. \comment{check with difference plots}
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Patterns of Policy Optimization to Grow the Circular Economy}
+
+An abstract application of the model yield in the exploration of potential policy optimization. We follow the rationale that the policy makers can influence on some parameters only, under the assumption that : (1) Transportation parameters are fixed by exogenous conditions, that include among other factors transportation infrastructure and energy price. These aspects fall under the influence of policies at a different level (both for scope and coverage) ; and (2) Distribution width is fixed, corresponding to the fixed industrial structure (roughly stylized in our model), which temporal scale of change is significantly larger in magnitude that the one of the model.
+
+In that context, the policy maker can influence the interaction range (gravity decay $d_0$) by giving incentives for collaboration between companies or a better circulation of information for example, and the collaboration threshold, also with incentives or technological help. These parameters correspond to short term relatively easy-to-implement policies . We study optimization patterns on the parameter plan $(d_0,\sigma)$. 
+
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\includegraphics[width=0.48\textwidth]{figures/uniform_pareto_distribSd0_05_transportationCost0_5}
+\includegraphics[width=0.48\textwidth]{figures/uniform_pareto_distribSd0_55_transportationCost3_5}\\
+\includegraphics[width=0.48\textwidth]{figures/gis_pareto_distribSd0_05_transportationCost0_5}
+\includegraphics[width=0.48\textwidth]{figures/gis_pareto_distribSd0_05_transportationCost3_5}
+\caption{\textbf{Different qualitative patterns of Optimization.} We compare the Pareto fronts for the bi-objective optimization on cost and remaining waste, for both uniform setup (first row) and gis geographical setup (second row). }
+\label{fig:pareto-regime}
+\end{figure}
+%%%%%%%%%%%%%%%%%%
+
+\subsection*{Spatial correlation input and output distribution}
+
+In Table \ref{Reg1} regression results are shown with the amount of recycled materials (RM) in the system as dependent variable for a syntactic city system. The total amount of RM has a minimum of 0 and a maximum of 50 over all simulations. We used two important spatial predictors, all other model parameters are fixed. The first spatial variable distance decay, which is function defining interaction potential between two actors, defined as $exp(-(d_{ij}/\delta))$, where $d_{ij}$ is the Euclidean distance between agent $i$ and agent $j$ and $\delta$ is the distance decay parameter. For this example we chose $\delta \in \{0.5, 1, 1.5, 2\}$ The second spatial parameter is the Length correlation between input and output distributions, which is a measure for how well the input and output distributions are matched by geographical location. In the synthetic city system and real population density spatial setup, the distance decay can be interpreted as the probability that companies between `centers' (cities or industrial parks) interact and the Length correlation is the probability that actors within `centers' can interact. 
+
+As can be seen from Table \ref{Reg1} both predictors together explain 84.1 percent of the variance in this particular setting. Not surprisingly as the Distance decay goes up (and the interaction probability goes up as well), the amount of recycled materials goes up as well. For Length correlation we find a quadratic effect. To get a better overview of what this means the standardized predicted DC scores are plotted in Figure \ref{Pred1} (interactions included). Low Length correlation hardly have any effect on the predicted Degree Circularity of the system, only at high length correlations, 0.4 or higher, does the correlation have effect. These results seem to suggest that matching companies to be located within the same center/city/industrial park only has an effect when the matching is very strict.  
+
+\begin{table}[]  \centering
+  \caption{Regression results for the amount of recycled materials in the system } 
+  \label{Reg1} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Recycled Materials (RM) \\ 
+\hline \\[-1.8ex] 
+ Distance decay 1 & 7.101$^{***}$ (0.164) \\ 
+ Distance decay 1.5 & 13.045$^{***}$ (0.164) \\ 
+ Distance decay 2 & 17.503$^{***}$ (0.164) \\ 
+ poly(Length correlation)1 & $-$0.640 (0.985) \\ 
+ poly(Length correlation)2 & 21.561$^{***}$ (2.312) \\ 
+ Constant & 2.846$^{***}$ (0.133) \\ 
+\hline \\[-1.8ex] 
+Observations & 2,480 \\ 
+R$^{2}$ & 0.841 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figures/Lcor2.pdf}
+\caption{Plot of predicted Degree Circularity}
+\label{Pred1}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%
+\section*{Discussion}
+In this working paper we introduced the basis of an agent based model for modeling industrial symbiotic processes. Industrial symbioses is about `closing the loop' mechanisms with a clear spatial component. It is therefore interesting to study the effect of these spatial interaction on the functioning of the system as a loop. Our first results indicate that there are clear differences when the model runs on a uniform spatial distribution compared to a synthetic city system or a real world density data. Secondly we found that matching companies in industrial parks only has an effect when the correlation between input materials and waste product is higher than 0.4. This abstract result implies that the design of industrial parks requires some strict central planning to match industrial actors in the same geographical proximity. 
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Model Extensions}
+Various possible model extensions for the basic model include for example :
+\begin{itemize}
+\item Bargain games with more than two players, implying game-theory framework to establish links among potential partners
+\item Random Utility Models
+\end{itemize}
+
+Model extensions for the final paper will be:
+\begin{itemize}
+\item A Google maps integration  
+\item Calibrated to real-world data
+\end{itemize}
+
+The goal for later papers is to make a basis for an open source circular economy application that can be used to monitor the circular economy, as well as create a market place for waste products.
+
+
+\todo{
+Experiments with the model: 
+\begin{itemize}
+\item diversity of company sizes (power law of input-output distribution sizes?)
+\item discretization of the resource dimension 
+\item non-uniform distribution for the selection of a mean value when generating a company
+\end{itemize}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%
+%\subsection*{Model Application}
+
+% directions towards an application on real data, what scale, etc.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%
+%\section*{Conclusion}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+\section*{Methods}
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Implementation}
+
+A first prototype was implemented in \texttt{NetLogo}. We also developed a \texttt{R} version, especially with the objective of an integration into a \texttt{shiny} web application for a real world use as described before. Model exploration was done using model exploration software OpenMole~\cite{reuillon2013openmole}. Code and results are available on the open repository of the project\footnote{at \texttt{https://github.com/SFICSSS16-CircularEconomy/CircularEconomy}}.
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+\subsection*{Internal model validation}
+
+
+\paragraph*{Statistical Consistency}
+
+First of all, we verify the internal consistence of the model by looking at statistical distribution of indicators (shown in fig.~\ref{fig:stat-distrib} for some points of the parameter space). Distribution are unimodal but not necessarily normal. We can however roughly estimate the number of runs needed to reach a certain confidence interval on the mean. For example, assuming normal laws, to have a $\alpha$ level CI of width $\sigma$ around the mean, the result is independent of distributions and verifies $\sigma = \frac{4\sigma \cdot z_{1-\alpha}}{\sqrt{n}}$, what gives $n\simeq 64$. We run experiments with $n=50$ in the following.
+
+\todo{select some figures only and explain the implications for these indicators}
+
+
+
+
+\paragraph*{Path-dependency and Emergence}
+
+% why abm is necessary
+
+We study the path-dependent character of models output, justifying the use of an agent-based model to reconstruct the emergent dynamics. \todo{for one config and one parameter, plot trajectories in time for several runs}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%
+% biblio
+
+%\newpage
+
+%\bibliographystyle{apalike}
+\bibliography{biblio}
+
+
+
+
+
+%%%%%
+%%  Supplementary Materials
+
+
+\newpage
+
+
+%%%%%%%%%%%%%%%%
+\section*{Supplementary Materials}
+
+
+\subsection*{Model Exploration}
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\hspace{-2cm}\includegraphics[width=1.3\textwidth]{figures/indics_distrib.png}
+\caption{Statistical distribution of indicators for some points in the parameter space. }
+\label{fig:stat-distrib}
+\end{figure}
+%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\hspace{-2cm}\includegraphics[width=1.3\textwidth]{figures/heatmap_indics}
+\caption{Heatmaps of indicator values in the 4-D parameter space}
+\label{fig:heatmap}
+\end{figure}
+%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\hspace{-2cm}\includegraphics[width=1.3\textwidth]{figures/pareto_wasteCost_overlapThreshold}
+\caption{Pareto fronts of total waste against total cost, at fixed values of transportation cost and distribution standard deviation.}
+\label{fig:pareto}
+\end{figure}
+%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TEMPLATES
+
+
+
+%\section*{Introduction}
+
+%The Introduction section, of referenced text\cite{Figueredo:2009dg} expands on the background of the work (some overlap with the Abstract is acceptable). The introduction should not include subheadings.
+
+%\section*{Results}
+
+%Up to three levels of \textbf{subheading} are permitted. Subheadings should not be numbered.
+
+%\subsection*{Subsection}
+
+%Example text under a subsection. Bulleted lists may be used where appropriate, e.g.
+
+%\begin{itemize}
+%\item First item
+%\item Second item
+%\end{itemize}
+
+%\subsubsection*{Third-level section}
+ 
+%Topical subheadings are allowed.
+
+%\section*{Discussion}
+
+%The Discussion should be succinct and must not contain subheadings.
+
+%\section*{Methods}
+
+%Topical subheadings are allowed. Authors must ensure that their Methods section includes adequate experimental and characterization data necessary for others in the field to reproduce their work.
+
+%\bibliography{sample}
+
+%\noindent LaTeX formats citations and references automatically using the bibliography records in your .bib file, which you can edit via the project menu. Use the cite command for an inline citation, e.g.  \cite{Figueredo:2009dg}.
+
+%\section*{Acknowledgements (not compulsory)}
+
+%Acknowledgements should be brief, and should not include thanks to anonymous referees and editors, or effusive comments. Grant or contribution numbers may be acknowledged.
+
+%\section*{Author contributions statement}
+
+%Must include all authors, identified by initials, for example:
+%A.A. conceived the experiment(s),  A.A. and B.A. conducted the experiment(s), C.A. and D.A. analysed the results.  All authors reviewed the manuscript. 
+
+%\section*{Additional information}
+
+%To include, in this order: \textbf{Accession codes} (where applicable); \textbf{Competing financial interests} (mandatory statement). 
+
+%The corresponding author is responsible for submitting a \href{http://www.nature.com/srep/policies/index.html#competing}{competing financial interests statement} on behalf of all authors of the paper. This statement must be included in the submitted article file.
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=\linewidth]{stream}
+%\caption{Legend (350 words max). Example legend text.}
+%\label{fig:stream}
+%\end{figure}
+
+%\begin{table}[ht]
+%\centering
+%\begin{tabular}{|l|l|l|}
+%\hline
+%Condition & n & p \\
+%\hline
+%A & 5 & 0.1 \\
+%\hline
+%B & 10 & 0.01 \\
+%\hline
+%\end{tabular}
+%\caption{\label{tab:example}Legend (350 words max). Example legend text.}
+%\end{table}
+
+%Figures and tables can be referenced in LaTeX using the ref command, e.g. Figure \ref{fig:stream} and Table \ref{tab:example}.
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+getwd()
+setwd('~/Documents/De Professor/The Thinker/Research Pubs/Economics/Unemployment Duration Paper/R Workspace')
+list.files()
+load(file = 'ud.rda')
+head(ud,15)
+q(save = 'yes')

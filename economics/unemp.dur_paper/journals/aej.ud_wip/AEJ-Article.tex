@@ -1,0 +1,146 @@
+%AEJ-Article.tex for AEA last revised 22 June 2011
+\documentclass[AEJ]{AEA}
+
+% The mathtime package uses a Times font instead of Computer Modern.
+% Uncomment the line below if you wish to use the mathtime package:
+%\usepackage[cmbold]{mathtime}
+% Note that miktex, by default, configures the mathtime package to use commercial fonts
+% which you may not have. If you would like to use mathtime but you are seeing error
+% messages about missing fonts (mtex.pfb, mtsy.pfb, or rmtmi.pfb) then please see
+% the technical support document at http://www.aeaweb.org/templates/technical_support.pdf
+% for instructions on fixing this problem.
+
+% Note: you may use either harvard or natbib (but not both) to provide a wider
+% variety of citation commands than latex supports natively. See below.
+
+% Uncomment the next line to use the natbib package with bibtex 
+%\usepackage{natbib}
+
+% Uncomment the next line to use the harvard package with bibtex
+\usepackage[abbr]{harvard}
+
+% This command determines the leading (vertical space between lines) in draft mode
+% with 1.5 corresponding to "double" spacing.
+\draftSpacing{1.5}
+
+\begin{document}
+
+\title{A Multi-Variate Regressional Approach to Understanding the Factors Driving Unemployment Duration}
+\shortTitle{Short title for running head}
+\author{Tingwei Adeck\thanks{%
+Paul \& Virginia Engler College of Business, Alumni of West Texas A \& M University, Canyon, TX, 79109, USA, tadeck1@buffs.wtamu.edu. This paper was inspired by an independent research project for my econometrics class, taught by Dr. Ryan Mattson. Overall, I have to give a special thanks to Dr. Mattson but also thank the Paul \& Virginia Engler College of Business faculty for teaching a lot about business, macroeconomics, and a desire to care about facts. Also I have to thank my lovely fiancee for her non-judgemental and supportive role in my life through the tough times, when I began nursing the idea of investigating unemployment duration. She has been my rock and this might not be possible without her. I also have to thank Dr. James Johnson for reinforcing my skills in R coding and opening the door for me to learn more about programming.}}
+\date{\today}
+\pubMonth{September}
+\pubYear{2019}
+\pubVolume{Vol}
+\pubIssue{Issue}
+\JEL{}
+\Keywords{}
+
+\begin{abstract}
+Understanding the macroeconomic factors driving unemployment duration ,particularly between racial subcategories presents an interesting dynamic that elicits econometric investigation. Unemployment duration data (annual data) since 1948 has shown some turbulence, in reactions to key economic events, as well as, passive economic events. Unemployment duration (in weeks) between 2011 and 2018 has seen a decline of $ - 42\% $, matched by a declining unemployment rate (in percent) of $ - 56\% $ in the same period. Despite the declining unemployment rate, unemployment duration is still testing slightly higher values compared to say the 1960s. In this paper, I developed a multivariate regression model to measure the effect of specific variables (unemployment rate, unemployment population demographics, inflation, labor participation rate and GDP) on unemployment duration(UD). My model found a statistically significant relationship between the percent change(year over year) of Black or African-American unemployment rate, percent change in GDP, percent change in labor participation rate (LPR) and the percent change in unemployment duration (UD). The novelty of my approach was my focus on the percent change of both independent and dependent variables, as it eliminated the simpler (trivial) approach of simply comparing reported values.\\
+
+\textbf{Keywords: Unemployment Duration, Unemployment Rate, Multivariate Regression Model.}\\
+(JEL J007)
+\end{abstract}
+
+\maketitle
+Unemployment duration, as well as, unemployment rate have seen a decline in the past eight years (2011-2019) (Fig 1). However, unemployment spells seem to be testing higher levels relative to previous periods in history. While we observe less volatility when looking at raw unemployment duration data, a high level of volatility emerges when looking at the year over year (yoy) percent change in unemployment duration. The amazing recovery in unemployment duration depicted by observing raw unemployment duration data,  seems less likely when dealing with percent changes in the same data. I focus on unemployment duration because it provides a somewhat better measure of long-term unemployment and possibly the state of the economy in regards to permanent jobs. Abraham and Shimer (2002) postulated that unemployment duration was concentrated among women because of their attachment to the labor force, which led to a decline in short-term unemployment associated with transitions in and out of the labor force. Valletta (1998) argued that declining job security and transient jobs were the key contributors to rising unemployment duration. While both assertions made above seemed appropriate at the time, my current dilemma seems to direct me towards investigating other factors affecting unemployment duration at a time when it seems to be declining. The consequence of my analysis is an opportunity to propose other theories explaining the current state of unemployment duration.  \\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+American Economics Journal Pointers:
+
+\begin{itemize}
+\item Do not use an "Introduction" heading. Begin your introductory material
+before the first section heading.
+
+\item Avoid style markup (except sparingly for emphasis).
+
+\item Avoid using explicit vertical or horizontal space.
+
+\item Captions are short and go below figures but above tables.
+
+\item The tablenotes or figurenotes environments may be used below tables
+or figures, respectively, as demonstrated below.
+
+\item If you have difficulties with the mathtime package, adjust the package
+options appropriately for your platform. If you can't get it to work, just
+remove the package or see our technical support document online (please
+refer to the author instructions).
+
+\item If you are using an appendix, it goes last, after the bibliography.
+Use regular section headings to make the appendix headings.
+
+\item If you are not using an appendix, you may delete the appendix command
+and sample appendix section heading.
+
+\item Either the natbib package or the harvard package may be used with bibtex.
+To include one of these packages, uncomment the appropriate usepackage command
+above. Note: you can't use both packages at once or compile-time errors will result.
+
+\end{itemize}
+
+\section{First Section in Body}
+
+Sample figure:
+
+\begin{figure}
+Figure here.
+
+\caption{Caption for figure below.}
+\begin{figurenotes}
+Figure notes without optional leadin.
+\end{figurenotes}
+\begin{figurenotes}[Source]
+Figure notes with optional leadin (Source, in this case).
+\end{figurenotes}
+\end{figure}
+
+Sample table:
+
+\begin{table}
+\caption{Caption for table above.}
+
+\begin{tabular}{lll}
+& Heading 1 & Heading 2 \\ 
+Row 1 & 1 & 2 \\ 
+Row 2 & 3 & 4%
+\end{tabular}
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
+Sample citation of Nash paper \cite{Nash}.
+
+References here (manual or bibTeX). If you are using bibTeX, add your bib file 
+name in place of BibFile in the bibliography command.
+% Remove or comment out the next two lines if you are not using bibtex.
+\bibliographystyle{aea}
+\bibliography{sample}
+
+% The appendix command is issued once, prior to all appendices, if any.
+\appendix
+
+\section{Mathematical Appendix}
+
+\end{document}
+
