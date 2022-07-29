@@ -1,0 +1,8 @@
+This is a nice project where i introduce those unfamiliar to the FRED API.
+In grad school i did this project using the excel FRED addon back in the days when i had not heard of APIs or even understood what they meant and also i was very new to R
+at the time.
+A while back i was seriously considering publishing a paper on unemployment duration and so got tired of reading csv files so I found out about the FRED API and decided 
+to give it a try.
+Check out the data analysis folder to see my use of this API.
+I will probably publish this paper but right now my efforts are focused on getting work so that i can concentrate on this project for a short period of time and then 
+submit for publication. NO PROMISES but i think this is a good topic to research and i hope to be the one to draw insights on this topic.
